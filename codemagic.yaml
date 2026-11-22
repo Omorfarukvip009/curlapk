@@ -1,16 +1,31 @@
+
 workflows:
   android-workflow:
-    name: API Request Studio
-
-    instance_type: linux_x2
+    name: API Request Studio - Android APK
+    instance_type: mac_mini_m2
 
     environment:
       java: 17
 
     scripts:
-      - name: Build debug APK
+      - name: Check project files
         script: |
-          gradle assembleDebug
+          ls -la
+          echo "Checking Android project..."
+
+      - name: Build Debug APK
+        script: |
+          if [ -f ./gradlew ]; then
+            chmod +x ./gradlew
+            ./gradlew --no-daemon assembleDebug
+          else
+            gradle --no-daemon assembleDebug
+          fi
 
     artifacts:
       - app/build/outputs/apk/debug/app-debug.apk
+
+    publishing:
+      email:
+        recipients: []
+        
