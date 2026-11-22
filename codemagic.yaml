@@ -1,20 +1,16 @@
 workflows:
-  android-debug:
-    name: API Request Sender - Debug APK
-    max_build_duration: 60
-    instance_type: mac_mini_m2
+  android-workflow:
+    name: API Request Studio
+
+    instance_type: linux_x2
+
     environment:
-      vars:
-        JAVA_VERSION: "17"
+      java: 17
+
     scripts:
-      - name: Configure Android SDK
+      - name: Build debug APK
         script: |
-          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
-      - name: Install Gradle and build APK
-        script: |
-          curl -L https://services.gradle.org/distributions/gradle-8.7-bin.zip -o /tmp/gradle.zip
-          unzip -q /tmp/gradle.zip -d /tmp
-          /tmp/gradle-8.7/bin/gradle --no-daemon assembleDebug
+          gradle assembleDebug
+
     artifacts:
       - app/build/outputs/apk/debug/app-debug.apk
-      
